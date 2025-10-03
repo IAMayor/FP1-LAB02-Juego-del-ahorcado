@@ -31,7 +31,25 @@ def normalizar(cadena):
       Cadena de texto con la palabra normalizada
     """
     # TODO: Implementa esta función (y elimina la instrucción pass)
-    pass
+    texto=cadena.lower() #todo minusculas
+    texto=texto.strip() #quitar espacios delante y detrás
+    texto2=""
+    for c in texto:
+        if c in "áä" :
+            c="a"
+        elif c in 'éë':
+            c='e' 
+        elif c in 'íï':
+            c='i' 
+        elif c in 'óö':
+            c='o' 
+        elif c in 'úü':
+            c='u'
+        texto2+=c
+  
+
+    return texto2 
+
 
 def ocultar(palabra_secreta, letras_usadas=""):
     '''Devuelve una cadena de texto con la palabra enmascarada. 
@@ -45,7 +63,13 @@ def ocultar(palabra_secreta, letras_usadas=""):
       Cadena de texto con la palabra enmascarada
     '''
     # TODO: Implementa esta función (y elimina la instrucción pass)
-    pass
+    texto=""
+    for c in palabra_secreta:
+        if c in letras_usadas:
+            texto+=c 
+        else:
+            texto+="_"
+    return texto 
 
 
 def ha_ganado(palabra_enmascarada):
@@ -58,10 +82,35 @@ def ha_ganado(palabra_enmascarada):
     - True si el jugador ha ganado, False en caso contrario
     '''
     # TODO: Implementa esta función (y elimina la instrucción pass)
-    pass
+    if "_" in palabra_enmascarada:
+        return False
+    else:
+        return True
 
 
 # TODO: Implementa la función mostrar_estado
+def mostrar_estado(palabra, letras, intentos_restan):
+    '''
+    la función `mostrar_estado` que usaremos durante el juego 
+    para mostrar
+    al jugador información sobre el transcurso del juego. 
+
+    La función recibe por parámetros 
+    palabra: la palabra enmascarada, 
+    letras: las letras ya usadas y 
+    intentos_restan: los intentos restantes. 
+
+    Un ejemplo de la salida mostrada en el terminal al llamar a la función 
+    sería el siguiente:
+    '''
+    print (f"Estado :{" ".join(palabra)} ")  
+
+    if letras=="":
+        print ("Letras usadas: ninguna")
+    else:
+        print ("Letras usadas: ",letras)
+    print (" Intentos restantes: ", intentos_restan)
+    return None
 
 # TODO: Implementa la función pedir_letra
 
