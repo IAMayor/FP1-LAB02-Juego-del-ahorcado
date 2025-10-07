@@ -1,6 +1,6 @@
 import random
 
-def elige_palabra(fichero="palabras.txt"):
+def elige_palabra(fichero="..\palabras.txt"):
     """
     Devuelve una palabra aleatoria tomada de un fichero de texto.
 
@@ -103,6 +103,7 @@ def mostrar_estado(palabra, letras, intentos_restan):
     Un ejemplo de la salida mostrada en el terminal al llamar a la función 
     sería el siguiente:
     '''
+    print (f"{"-"*10}")
     print (f"Estado :{" ".join(palabra)} ")  
 
     if letras=="":
@@ -113,7 +114,88 @@ def mostrar_estado(palabra, letras, intentos_restan):
     return None
 
 # TODO: Implementa la función pedir_letra
+def pedir_letra (letras_antes:str):
+    '''
+    Implementa la función `pedir_letra`, que solicita al jugador que introduzca una letra y se asegura de que la entrada proporcionada 
+    por el jugador sea válida. Debe escribir la cabecera de la función y su cadena de documentación.
+    
+    Para que la entrada recibida del usuario sea válida debe cumplirse que:
+    - Sea una letra (y solo una)
+    - No sea una letra que ya se ha pedido anteriormente
+
+    La función recibe un parámetro con las letras ya solicitadas anteriormente. Si el jugador no introduce una entrada válida, 
+    la función le informa y se la vuelve a pedir, hasta que el jugador introduzca una letra válida. 
+    En ese momento, la función devuelve dicha letra, **siempre en minúculas**.
+
+    Una posible salida en el terminal de una llamada a la función sería esta 
+    (suponiendo que las letras usadas incluyen sólo a la letra `a`)
+    '''
+    sigue=True
+    while sigue: #en realidad saldrá del bucle con el return
+        letra=input("Introduce una letra: ").lower()
+        if len(letra)>1:
+            print ("Debes introducir una única letra")   
+        elif not letra.isalpha():
+            print ("Debes introducir una letra")
+        elif letra in letras_antes:
+            print ("Esa letra ya la has utilizado")
+        else: 
+            return letra
+    return None 
+
 
 # TODO: Implementa la función jugar
+def jugar(palabra_secreta, intentos=6):
+    '''
+    La función `jugar` recibe la palabra secreta que hay que adivinar y el número máximo de intentos (por defecto, será 6).
+    1. **Inicialización**:  
+    - Normalizamos la palabra mediante la función `normalizar`.  
+    - Si la palabra está vacía, devolvemos `None` (y el juego termina).  
+    - Enmascaramos la palabra mediante la función `ocultar`.  
+    - Inicializamos una variable con el número máximo de intentos.  
+    - Inicializamos una variable con las letras usadas hasta el momento (cadena vacía).  
+
+    2. **Bucle principal**:  
+    - Mientras el jugador tenga intentos restantes y no haya ganado:  
+        - Muestra el estado del juego usando `mostrar_estado`.  
+        - Pide una nueva letra usando `pedir_letra`.  
+        - Añade a las letras usadas la que acabas de leer.  
+        - Si la letra recibida no pertenece a la palabra secreta:              
+            - Muestra un mensaje indicándolo.  
+            - Resta 1 a los intentos.  
+        - Si la letra recibida sí pertenece a la palabra secreta:  
+            - Muestra un mensaje indicándolo.  
+            - Actualiza la palabra enmascarada mediante la función `ocultar`.  
+
+    3. **Fin del juego**: muestra un mensaje indicando si el jugador ha ganado o ha perdido, y cuál era la palabra original.
+
+    '''
+    palabra=normalizar(palabra_secreta)
+    if palabra=="":
+        return None 
+    mascara=ocultar(palabra)
+    veces=0
+    letras=""
+    no_gana=True
+    while veces<intentos and no_gana:
+        mostrar_estado(mascara,letras,intentos-veces)
+        nueva_letra=pedir_letra(letras)
+        letras+=nueva_letra
+        if nueva_letra in palabra:
+            print(f"La letra '{nueva_letra}' ESTÄ en la palabra secreta ✅ \n ")
+            mascara=ocultar(palabra,letras)
+            if "_" not in mascara:
+                no_gana=False
+        else:
+            print(f"La letra '{nueva_letra}' no se encuentra en la palabra secreta ❌ \n")
+            veces+=1
+    print ("*** Fin del juego ***") 
+    if no_gana:
+        print (f"Lo siento has superado el máximo de intentos la palabra secreta era {palabra}")
+    else:
+        print (f"🎉¡¡¡ ENHORABUENA !!! has ACERTADO la palabra secreta {palabra.upper()} 🎉")
+    return None
 
 # TODO: Escribe el programa principal
+palabra_alea=elige_palabra()
+jugar(palabra_alea)
